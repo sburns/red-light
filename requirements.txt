@@ -1,5 +1,4 @@
 Flask==0.9
-Flask-Testing==0.4
 Jinja2==2.6
 PyCap==0.5.1
 Werkzeug==0.8.3
