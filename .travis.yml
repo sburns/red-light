@@ -2,6 +2,7 @@ language: python
 python:
   - "2.7"
 install:
+  - pip install requests==0.14.1
   - pip install -r requirements.txt --use-mirrors
   - pip install -r dev-requirements.txt --use-mirrors
 script: nosetests -v
