@@ -1,0 +1,4 @@
+Flask-Testing==0.4
+nose==1.2.1
+pip-tools==0.2
+twill==0.9

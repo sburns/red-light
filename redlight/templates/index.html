@@ -1,0 +1,96 @@
+{%extends "layout.html"%}
+
+{%block body%}
+<div class="row">
+  <legend>1. REDCap Credentials</legend>
+  <div class="span7">
+    <form class="form">
+        <input class="input-xxlarge" id="inputURL" placeholder="REDCap API URL" type="url"></input>
+        <input class="input-xxlarge" id="inputAPI" placeholder="REDCAP API Key" type="text"></input>
+    </form>
+  </div>
+  <div class="span4">
+    <p>
+      Enter the URL to your REDCap's API and your API Key. These can be obtained from your REDCap administrator.
+    </p>
+    <p>
+      <small>
+        See <a href="{{ url_for('about') }}">the about page </a>for what Redlight does and doesn't do with your API key.
+      </small>
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <legend>2. Search Parameters</legend>
+  <div class="span7">
+    <form class="form-inline" id="filterForm">
+      <div id="filter1" class="clonedFilter" style="margin-bottom: 4px;">
+        <input class="key" data-provide="typeahead" type="text" placeholder="Column name" id="key1"></input>
+        <select class="span1 verb" id="select1">
+          {% for v in verbs %}
+          <option>{{ v }}</option>
+          {% endfor %}
+        </select>
+        <input class="value" type="text" placeholder="Filter value" id="value1"></input>
+      </div>
+    </form>
+    <div class="btn-group">
+      <a class="btn" href="#" id="addFilt"><i class="icon-plus"></i></a>
+      <a class="btn" href="#" id="removeFilt"><i class="icon-remove"></i></a>
+    </div>
+  </div>
+  <div class="span4">
+    <p>For each constraint you'd like to place on the search, enter the raw column name in the left text box, select the appropriate comparison and enter the constraint value. </p>
+    <p>
+      <small>
+      To filter by more than one constraint, click the <i class="icon-plus"> </i> button. To remove the last constraint, click the <i class="icon-remove"> </i> button.
+      </small>
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <legend>3. Returned Data</legend>
+  <div class="span7">
+    <form class="form-inline" id="filterForm">
+      <div id="outcol1" class="clonedOutputColumn" style="margin-bottom: 4px;">
+        <input class="outcol" data-provide="typeahead" type="text" placeholder="Output Key" id="col1"></input>
+      </div>
+    </form>
+    <div class="btn-group">
+      <a class="btn" href="#" id="addOut"><i class="icon-plus"></i></a>
+      <a class="btn" href="#" id="removeOut"><i class="icon-remove"></i></a>
+    </div>
+  </div>
+  <div class="span4">
+    <p>
+      Choose specific raw fields to output. The primary field is always outputted.
+    </p>
+    <p>
+      <small>
+        You can add fields to the output by clicking on the <i class="icon-plus"> </i> button and remove the last one by clicking on the <i class="icon-remove"></i> button.
+      </small>
+    </p>
+  </div>
+</div>
+
+<div class="row" >
+  <a class="btn btn-success" style="margin: 20px 0;" href="#" id="filter">Search</a>
+</div>
+
+<div class="row">
+  <legend>4. Results</legend>
+  <div class="span2">
+    <label id="resultText" class='label label-info pull-left'>Nothing to see yet.</label>
+  </div>
+  <div class="span9">
+    <div id="results"></div>
+  </div>
+</div>
+
+{%endblock%}
+
+{%block inline_js%}
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{%endblock%}
