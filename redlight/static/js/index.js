@@ -71,10 +71,6 @@ $(document).ready(function () {
     $(".outcol").each(function (){
       outputs.push($(this).val());
     });
-    keystring = keys.join(',');
-    verbstring = verbs.join(',');
-    valuestring = values.join(',');
-    outstring = outputs.join(',');
     $.getJSON($SCRIPT_ROOT + '/api/1/filter.json',
     $.param({
       url: $("#inputURL").val(),
