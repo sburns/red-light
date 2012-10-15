@@ -10,8 +10,7 @@ $(document).ready(function () {
     newFilter.children('select[id*="select"]').attr('id', 'select' + newNum);
     newFilter.children('input[id*="value"]').attr('id', 'value' + newNum);
     $('#filter' + num).after(newFilter);
-    $('a#remove').removeClass('disabled');
-    $('p.lead').text('Hi');
+    $('a#removeFilt').removeClass('disabled');
   });
 
 
@@ -23,7 +22,7 @@ $(document).ready(function () {
       return;
     $('#filter' + num).remove();
     if (num - 1 == 1)
-      $('a#remove').addClass('disabled');
+      $('a#removeFilt').addClass('disabled');
   });
 
   // Add Output Column
