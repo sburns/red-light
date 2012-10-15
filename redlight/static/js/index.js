@@ -76,14 +76,14 @@ $(document).ready(function () {
     valuestring = values.join(',');
     outstring = outputs.join(',');
     $.getJSON($SCRIPT_ROOT + '/api/1/filter.json',
-    {
+    $.param({
       url: $("#inputURL").val(),
       api: $("#inputAPI").val(),
-      keys: keystring,
-      verbs: verbstring,
-      values: valuestring,
-      outputs: outstring
-    },
+      keys: keys,
+      verbs: verbs,
+      values: values,
+      outputs: outputs
+    }, true),
     function(d) {
       if (d.err.length > 0) {
         $('#resultText').text(d.err);

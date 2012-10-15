@@ -29,14 +29,14 @@ def search():
         try:
             api = request.args.get('api', '')
             url = request.args.get('url', '')
-            keys = filter(None, request.args.get('keys', '').split(','))
-            verbs = filter(None, request.args.get('verbs', '').split(','))
-            values = filter(None, request.args.get('values', '').split(','))
-            outputs = filter(None, request.args.get('outputs', '').split(','))
+            keys = request.args.getlist('keys')
+            verbs = request.args.getlist('verbs')
+            values = request.args.getlist('values')
+            outputs = request.args.getlist('outputs')
             req = [api, url, keys, verbs, values]
             if not all(req):
                 # uh oh
-                raise ValueError("Bad Argument: %s" % ' '.join(filter(lambda x: not x, req)))
+                raise ValueError("Bad Argument: %s" % ' '.join(str(r) for r in filter(lambda x: not x, req)))
             if not (len(keys) == len(verbs) == len(values)):
                 raise Exception("Something strange happened")
             filters = list(zip(keys, verbs, values))
