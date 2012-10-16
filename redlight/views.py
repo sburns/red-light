@@ -10,6 +10,7 @@ __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 
 from flask import render_template, jsonify, request
 
+from . import __version__ as version
 from . import app
 from . import backend
 from .err import RedlightError
@@ -80,3 +81,7 @@ def about():
 @app.context_processor
 def inject_filter_verbs():
     return {'verbs': sorted(backend.VERBS.keys())}
+
+@app.context_processor
+def inject_version():
+    return {'version': version}
