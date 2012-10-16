@@ -14,7 +14,9 @@ from StringIO import StringIO
 import pandas as pd
 from redcap import Project
 from numpy import dtype
+from flask import request
 
+from .err import RedlightError
 
 VERBS = {
     "<": op.lt,
@@ -29,8 +31,26 @@ DTYPE_COERCER = {dtype('float64'): float,
                  dtype('object'): str}
 
 
+def parse_arguments(req):
+    api = request.args.get('api')
+    url = request.args.get('url')
+    keys = request.args.getlist('keys')
+    verbs = request.args.getlist('verbs')
+    values = request.args.getlist('values')
+    zipped = zip(['api', 'url', 'keys', 'verbs', 'values'],
+                 [api, url, keys, verbs, values])
+    for param, val in zipped:
+        if not val:
+            raise RedlightError("The %s parameter is required" % param)
+    if not (len(keys) == len(verbs) == len(values)):
+        raise RedlightError("keys, verbs and values must be the same length")
+    filters = list(zip(keys, verbs, values))
+    return api, url, filters
+
+
 class DB(object):
-    """Base"""
+    """Base
+    Subclasses need to make self.df in contstructor"""
 
     def __init__(self):
         raise NotImplementedError
@@ -53,7 +73,7 @@ class DB(object):
         return results
 
     def make_outputs(self, keys):
-        # Remove columns that aren't in keys
+        # Remove columns that aren't in keys (but were used to filter)
         all_results = []
         from_df = self.df.to_dict()
         for record in self.df.index:
@@ -61,7 +81,10 @@ class DB(object):
             record_dict[self.df.index.name] = str(record)
             for key in keys:
                 if key in from_df:
-                    record_dict[key] = from_df[key][record]
+                    # dtypes used in pandas aren't json-able, so coerce them to
+                    # normal python types
+                    coercer = DTYPE_COERCER[self.df[key].dtype]
+                    record_dict[key] = coercer(from_df[key][record])
             all_results.append(record_dict)
         return all_results
 
@@ -72,8 +95,9 @@ class DB(object):
 class RCDB(DB):
     """Class representing a redcap database"""
 
-    def __init__(self, url, api):
+    def __init__(self, url, api, initial_fields):
         self.proj = Project(url, api)
+        self.make_df(initial_fields)
 
     def make_df(self, fields):
         csv = StringIO(self.proj.export_records(fields=fields, format='csv'))

@@ -28,32 +28,17 @@ def search():
     header = []
     try:
         try:
-            api = request.args.get('api', '')
-            url = request.args.get('url', '')
-            keys = request.args.getlist('keys')
-            verbs = request.args.getlist('verbs')
-            values = request.args.getlist('values')
-            outputs = request.args.getlist('outputs')
-            req = [api, url, keys, verbs, values]
-            if not all(req):
-                # uh oh
-                raise ValueError("Bad Argument: %s" % ' '.join(str(r) for r in filter(lambda x: not x, req)))
-            if not (len(keys) == len(verbs) == len(values)):
-                raise Exception("Something strange happened")
-            filters = list(zip(keys, verbs, values))
+            outputs = filter(None, request.args.getlist('outputs'))
+            api, url, filters = backend.parse_arguments(request)
         except Exception as e:
-            raise RedlightError("Error parsing parameters (%s)" % e)
-        try:
-            # pycap call
-            db = backend.RCDB(url, api)
-        except Exception as e:
-            err = "Couldn't connect to REDCap, check your credentials"
+            raise RedlightError("Error occured parsing arguments (%s)" % e)
+        keys = [f[0] for f in filters]
         all_keys = list(set(keys + outputs))
         try:
-            # pycap call
-            db.make_df(all_keys)
+            # pycap calls
+            db = backend.RCDB(url, api, all_keys)
         except Exception as e:
-            raise RedlightError("Error occured in exporting from REDCap (%s) " % e)
+            err = "Couldn't connect to or export from REDCap, check your credentials"
         try:
             # Run the filters, get a new df
             filt_df = db.filter(filters)
