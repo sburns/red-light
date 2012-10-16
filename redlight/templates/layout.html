@@ -6,24 +6,23 @@
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+  <div class="navbar navbar-inverse navbar-static-top">
+    <div class="navbar-inner">
+      <a class="brand" href="{{ url_for('index') }}">Red-Light</a>
+      <ul class="nav">
+        <li id="navSearch"><a href="{{ url_for('index') }}">Search</a></li>
+        <li id="navAbout"><a href="{{ url_for('about') }}">About</a></li>
+      </ul>
+  </div>
   <div class="container">
-    <div class="row" style="padding: 5px;"></div>
-    <div class="navbar">
-      <div class="navbar-inner">
-        <a class="brand" href="{{ url_for('index') }}">Red-Light</a>
-        <ul class="nav nav-tabs">
-          <li id="navSearch"><a href="{{ url_for('index') }}">Search</a></li>
-          <li id="navAbout"><a href="{{ url_for('about') }}">About</a></li>
-        </ul>
-      </div>
-    </div>
     <div class="row">
       <div class="span1">
       </div>
-      <div class="span11">
+      <div class="span10">
         {%block body%}
         {%endblock%}
       </div>
+      <div class="span1"></div>
     </div>
   </div>
   <div class="footer">

@@ -1,7 +1,7 @@
 {%extends "layout.html"%}
 
 {%block body%}
-<div class="row">
+<div class="row" style="padding-top: 10px;">
   <legend>1. REDCap Credentials</legend>
   <div class="span7">
     <form class="form">
@@ -9,16 +9,16 @@
         <input class="input-xxlarge" id="inputAPI" placeholder="REDCAP API Key" type="text"></input>
     </form>
   </div>
-  <div class="span4">
+  <div class="span3">
     <p>
       Enter the URL to your REDCap's API and your API Key. These can be obtained from your REDCap administrator.
     </p>
-    <p>
+<!--     <p>
       <small>
         See <a href="{{ url_for('about') }}">the about page </a>for what Red-Light does and doesn't do with your API key.
       </small>
     </p>
-  </div>
+ -->  </div>
 </div>
 
 <div class="row">
@@ -40,7 +40,7 @@
       <a class="btn" href="#" id="removeFilt"><i class="icon-remove"></i></a>
     </div>
   </div>
-  <div class="span4">
+  <div class="span3">
     <p>For each constraint you'd like to place on the search, enter the raw column name in the left text box, select the appropriate comparison and enter the constraint value. </p>
     <p>
       <small>
@@ -63,7 +63,7 @@
       <a class="btn" href="#" id="removeOut"><i class="icon-remove"></i></a>
     </div>
   </div>
-  <div class="span4">
+  <div class="span3">
     <p>
       Choose specific raw fields to output. The primary field is always outputted.
     </p>
@@ -75,16 +75,21 @@
   </div>
 </div>
 
-<div class="row" >
-  <a class="btn btn-success" style="margin: 20px 0;" href="#" id="filter">Search</a>
+<div class="row">
+  <div class="span7">
+    <a class="btn btn-large btn-primary btn-block" style="margin: 20px 0;" href="#" id="filter">Search</a>
+  </div>
 </div>
 
 <div class="row">
   <legend>4. Results</legend>
-  <div class="span2">
-    <label id="resultText" class='label label-info pull-left'>Nothing to see yet.</label>
+  <div class="span10">
+    <div class="alert alert-info" id="resultAlert">
+<!--       <a href="#" class="close" data-dismiss="alert">x</a>
+ -->      <span id="resultText">Nothing to see yet.</span>
+    </div>
   </div>
-  <div class="span9">
+  <div class="span10">
     <div id="results"></div>
   </div>
 </div>

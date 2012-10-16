@@ -54,7 +54,7 @@ $(document).ready(function () {
   $('a#filter').click(function () {
     $('#results').empty();
     $('#resultText').text("Searching...");
-    $('#resultText').removeClass('label-success').addClass('label-info');
+    $('#resultAlert').removeClass('alert-success').removeClass('alert-error').addClass('alert-info');
     var keys = [];
     var verbs = [];
     var values = [];
@@ -83,11 +83,11 @@ $(document).ready(function () {
     function(d) {
       if (d.err.length > 0) {
         $('#resultText').text(d.err);
-        $('#resultText').removeClass('label-info').addClass('label-important');
+        $('#resultAlert').removeClass('alert-info').addClass('alert-error');
         return;
       } else {
-        $('#resultText').text('Results (' + d.result.length + ' found)');
-        $('#resultText').removeClass('label-info').addClass('label-success');
+        $('#resultText').text(d.result.length + ' records matched the specified filters.');
+        $('#resultAlert').removeClass('alert-info').addClass('alert-success');
         var content = '<table class="table table-striped"><thead><tr>';
         $.each(d.header, function(ind, val) {
           content += '<th>' + val + '</th>';
