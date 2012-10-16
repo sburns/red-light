@@ -9,9 +9,7 @@ __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 
 
-from flask.ext.testing import TestCase
-
-from redlight import app
+from . import TestCase, app
 
 
 class ViewTest(TestCase):
