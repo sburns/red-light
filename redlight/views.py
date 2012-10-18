@@ -21,7 +21,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/api/1/filter.json')
+@app.route('/v1/filter.json')
 def search():
     err = ''
     results = []
@@ -66,6 +66,7 @@ def about():
 @app.context_processor
 def inject_filter_verbs():
     return {'verbs': sorted(backend.VERBS.keys())}
+
 
 @app.context_processor
 def inject_version():

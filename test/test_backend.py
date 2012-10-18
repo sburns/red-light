@@ -22,7 +22,7 @@ class ViewTest(TestCase):
     def test_filter_path_v1(self):
         "Assert correct filter URL path"
         with app.test_request_context(URLs['good']):
-            self.assertEqual(request.path, '/api/1/filter.json')
+            self.assertEqual(request.path, '/v1/filter.json')
 
     def test_parse_args(self):
         "Test argument parsing with good params"

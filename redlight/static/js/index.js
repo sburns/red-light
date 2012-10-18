@@ -71,7 +71,7 @@ $(document).ready(function () {
     $(".outcol").each(function (){
       outputs.push($(this).val());
     });
-    $.getJSON($SCRIPT_ROOT + '/api/1/filter.json',
+    $.getJSON($SCRIPT_ROOT + '/v1/filter.json',
     $.param({
       url: $("#inputURL").val(),
       api: $("#inputAPI").val(),
