@@ -2,3 +2,6 @@ Flask-Testing==0.4
 nose==1.2.1
 pip-tools==0.2
 twill==0.9
+selenium==2.25.0
+splinter==0.4.8
+lxml==2.3.6
