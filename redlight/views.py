@@ -21,11 +21,9 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/v1/filter.json')
-def search():
+@app.route('/v1/filter.<format>')
+def search(format):
     err = ''
-    results = []
-    header = []
     try:
         try:
             outputs = filter(None, request.args.getlist('outputs'))
@@ -50,13 +48,17 @@ def search():
             # Make list of maps
             header = list(outputs)
             header.insert(0, db.index_name())
-            results = db.make_outputs(outputs)
+            results = db.make_outputs(outputs, format=format)
         except Exception as e:
             raise RedlightError("Error occured in generating output (%s)" % e)
     except Exception as e:
         err = str(e)
-    return jsonify(result=results, header=header, err=err)
-
+        results = []
+        header = []
+    if format == 'json':
+        return jsonify(result=results, header=header, err=err)
+    else:
+        return err + results
 
 @app.route('/about')
 def about():

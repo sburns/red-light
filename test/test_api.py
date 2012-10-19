@@ -27,3 +27,8 @@ class ViewTest(TestCase):
         for of in output_fields:
             first_record = response.json['result'][0]
             self.assertIn(of, first_record)
+
+    def test_csv_output(self):
+        "Ensure csv output"
+        response = self.client.get(URLs['good_csv'])
+        self.assertIsInstance(response.content, basestring)

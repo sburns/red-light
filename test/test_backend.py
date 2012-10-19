@@ -37,8 +37,8 @@ class ViewTest(TestCase):
     def test_parse_args_bad_params(self):
         "Test argument parsing with bad params"
         # No url
-        zipped = zip(['no_url', 'no_api', 'no_keys', 'no_verbs', 'no_values'],
-            ['url', 'api', 'keys', 'verbs', 'values'])
+        zipped = zip(['no_url', 'no_api', 'no_fields', 'no_verbs', 'no_values'],
+            ['url', 'api', 'fields', 'verbs', 'values'])
         for url_key, param in zipped:
             with app.test_request_context(URLs[url_key]):
                 regex = 'The %s parameter is required' % param

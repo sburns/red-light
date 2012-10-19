@@ -34,17 +34,17 @@ DTYPE_COERCER = {dtype('float64'): float,
 def parse_arguments(req):
     api = request.args.get('api')
     url = request.args.get('url')
-    keys = request.args.getlist('keys')
+    fields = request.args.getlist('fields')
     verbs = request.args.getlist('verbs')
     values = request.args.getlist('values')
-    zipped = zip(['api', 'url', 'keys', 'verbs', 'values'],
-                 [api, url, keys, verbs, values])
+    zipped = zip(['api', 'url', 'fields', 'verbs', 'values'],
+                 [api, url, fields, verbs, values])
     for param, val in zipped:
         if not val:
             raise RedlightError("The %s parameter is required" % param)
-    if not (len(keys) == len(verbs) == len(values)):
-        raise RedlightError("keys, verbs and values must be the same length")
-    filters = list(zip(keys, verbs, values))
+    if not (len(fields) == len(verbs) == len(values)):
+        raise RedlightError("fields, verbs and values must be the same length")
+    filters = list(zip(fields, verbs, values))
     return api, url, filters
 
 
@@ -72,20 +72,29 @@ class DB(object):
             results = results[c]
         return results
 
-    def make_outputs(self, keys):
+    def make_outputs(self, keys, format='json'):
         # Remove columns that aren't in keys (but were used to filter)
-        all_results = []
-        from_df = self.df.to_dict()
-        for record in self.df.index:
-            record_dict = {}
-            record_dict[self.df.index.name] = str(record)
-            for key in keys:
-                if key in from_df:
-                    # dtypes used in pandas aren't json-able, so coerce them to
-                    # normal python types
-                    coercer = DTYPE_COERCER[self.df[key].dtype]
-                    record_dict[key] = coercer(from_df[key][record])
-            all_results.append(record_dict)
+        cols_not_needed = set(self.df.columns) - set(keys)
+        map(self.df.pop, cols_not_needed)
+        if format == 'json':
+            all_results = []
+            from_df = self.df.to_dict()
+            for record in self.df.index:
+                record_dict = {}
+                record_dict[self.df.index.name] = str(record)
+                for key in keys:
+                    if key in from_df:
+                        # dtypes used in pandas aren't json-able, so coerce them to
+                        # normal python types
+                        coercer = DTYPE_COERCER[self.df[key].dtype]
+                        record_dict[key] = coercer(from_df[key][record])
+                all_results.append(record_dict)
+        elif format == 'csv':
+            result_buf = StringIO()
+            self.df.to_csv(result_buf)
+            all_results = result_buf.getvalue()
+        elif format == 'html':
+            all_results = self.df.to_html()
         return all_results
 
     def index_name(self):

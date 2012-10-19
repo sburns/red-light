@@ -6,7 +6,7 @@ $(document).ready(function () {
     var newNum = (num + 1);
     var newFilter = $('#filter' + num).clone().attr('id', 'filter' + newNum);
     // Update each child
-    newFilter.children('input[id*="key"]').attr('id', 'key' + newNum);
+    newFilter.children('input[id*="field"]').attr('id', 'field' + newNum);
     newFilter.children('select[id*="select"]').attr('id', 'select' + newNum);
     newFilter.children('input[id*="value"]').attr('id', 'value' + newNum);
     $('#filter' + num).after(newFilter);
@@ -55,12 +55,12 @@ $(document).ready(function () {
     $('#results').empty();
     $('#resultText').text("Searching...");
     $('#resultAlert').removeClass('alert-success').removeClass('alert-error').addClass('alert-info');
-    var keys = [];
+    var fields = [];
     var verbs = [];
     var values = [];
     var outputs = [];
-    $(".key").each(function() {
-      keys.push($(this).val());
+    $(".field").each(function() {
+      fields.push($(this).val());
     });
     $(".value").each(function () {
       values.push($(this).val());
@@ -75,7 +75,7 @@ $(document).ready(function () {
     $.param({
       url: $("#inputURL").val(),
       api: $("#inputAPI").val(),
-      keys: keys,
+      fields: fields,
       verbs: verbs,
       values: values,
       outputs: outputs
