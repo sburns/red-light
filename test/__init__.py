@@ -12,6 +12,9 @@ from flask.ext.testing import TestCase
 from flask import request
 from redlight import app
 
+RC_URL = 'https://redcap.vanderbilt.edu/api/'
+RC_API = 'AB5C15042ED4E15BB487C4E15A3AA928'
+
 URLs = {
     'good': '/v1/filter.json?api=AB5C15042ED4E15BB487C4E15A3AA928'\
         '&url=https%3A%2F%2Fredcap.vanderbilt.edu%2Fapi%2F&fields=test1_score'\
@@ -32,4 +35,6 @@ URLs = {
     'no_values': '/v1/filter.json?api=AB5C15042ED4E15BB487C4E15A3AA928'\
         '&url=https%3A%2F%2Fredcap.vanderbilt.edu%2Fapi%2F&fields=test1_score'\
         '&verbs=%3C&outputs=first_name&outputs=last_name',
+    'get_columns':'/v1/columns.json?api=AB5C15042ED4E15BB487C4E15A3AA928'\
+        '&url=https%3A%2F%2Fredcap.vanderbilt.edu%2Fapi%2F'
 }

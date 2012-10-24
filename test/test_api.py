@@ -11,7 +11,7 @@ __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 from . import TestCase, URLs, app
 
 
-class ViewTest(TestCase):
+class APITest(TestCase):
 
     def create_app(self):
         app.config["TESTING"] = True
@@ -28,7 +28,15 @@ class ViewTest(TestCase):
             first_record = response.json['result'][0]
             self.assertIn(of, first_record)
 
+    def test_get_columns(self):
+        "Test grabbing columns from the API"
+        response = self.client.get(URLs['get_columns'])
+        json = response.json
+        self.assertEqual(0, len(json['err']))
+        self.assertTrue('columns' in json)
+        self.assertEqual(7, len(json['columns']))
+
     def test_csv_output(self):
         "Ensure csv output"
         response = self.client.get(URLs['good_csv'])
-        self.assertIsInstance(response.content, basestring)
+        self.assertIsInstance(response.data, basestring)

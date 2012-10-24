@@ -21,6 +21,19 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/v1/columns.<format>')
+def get_columns(format):
+    err = ''
+    columns = []
+    try:
+        api, url, _ = backend.parse_arguments(request, req_filter=False)
+        columns = backend.get_columns(url, api)
+    except Exception as e:
+        err = "Error:%s" % str(e)
+    finally:
+        return jsonify(err=err, columns=columns)
+
+
 @app.route('/v1/filter.<format>')
 def search(format):
     err = ''
@@ -59,6 +72,7 @@ def search(format):
         return jsonify(result=results, header=header, err=err)
     else:
         return err + results
+
 
 @app.route('/about')
 def about():

@@ -8,12 +8,12 @@ Testing the redlight backend
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 
-from . import TestCase, request, app, URLs
+from . import TestCase, request, app, URLs, RC_URL, RC_API
 
 from redlight import backend, err
 
 
-class ViewTest(TestCase):
+class BackendTest(TestCase):
 
     def create_app(self):
         app.config["TESTING"] = True
@@ -44,3 +44,10 @@ class ViewTest(TestCase):
                 regex = 'The %s parameter is required' % param
                 with self.assertRaisesRegexp(err.RedlightError, regex):
                     api, url, filters = backend.parse_arguments(request)
+
+    def test_get_columns(self):
+        "Test grabbing columns from a REDCap"
+        correct_columns = ['study_id', 'first_name', 'last_name', 'dob', 'sex',
+            'test1_score', 'test2_score']
+        comp_columns = backend.get_columns(RC_URL, RC_API)
+        self.assertEqual(correct_columns, comp_columns)

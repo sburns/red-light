@@ -31,21 +31,29 @@ DTYPE_COERCER = {dtype('float64'): float,
                  dtype('object'): str}
 
 
-def parse_arguments(req):
+def parse_arguments(req, req_filter=True):
     api = request.args.get('api')
     url = request.args.get('url')
     fields = request.args.getlist('fields')
     verbs = request.args.getlist('verbs')
     values = request.args.getlist('values')
-    zipped = zip(['api', 'url', 'fields', 'verbs', 'values'],
-                 [api, url, fields, verbs, values])
-    for param, val in zipped:
+    if req_filter:
+        required = zip(['api', 'url', 'fields', 'verbs', 'values'],
+                     [api, url, fields, verbs, values])
+    else:
+        required = zip(['api', 'url'], [api, url])
+    for param, val in required:
         if not val:
             raise RedlightError("The %s parameter is required" % param)
     if not (len(fields) == len(verbs) == len(values)):
         raise RedlightError("fields, verbs and values must be the same length")
     filters = list(zip(fields, verbs, values))
     return api, url, filters
+
+
+def get_columns(url, api):
+    p = Project(url, api)
+    return p.field_names
 
 
 class DB(object):
