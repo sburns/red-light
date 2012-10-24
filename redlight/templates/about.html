@@ -22,13 +22,14 @@
     <dl>
         <dt>What does Red-Light do with my API Key?</dt>
         <dd>
-          When you press the Search button, Red-Light exports data from your REDCap project two times.
+          First, when you input your API URL and API Key, the field names from your REDCap project are exported. The field names provide typeahead functionality in the filter and output field textboxes. This means that as you type in either of these textboxes, fields that contain what you've typed appear below. This should make it easier to find the fields you're interested in.
           <br /><br />
-          First, Red-Light creates a representation of the project in code. It does this using <a href="http://sburns.github.com/PyCap">PyCap</a>, a python library for communicating with REDCap projects. When creating the representation, an API call is issued to grab the REDCap project's metadata, or Data Dictionary.
+          When you press the Search button, Red-Light exports data from your REDCap project once more. Red-Light creates a representation of the project in code. It does this using <a href="http://sburns.github.com/PyCap">PyCap</a>, a python library for communicating with REDCap projects. When creating the representation, an API call is issued to grab the REDCap project's metadata, or Data Dictionary.
           <br /><br />
-          Second, to fullfill the search request, Red-Light exports only the columns that were specified in the filters and requested output. Absolutely no other data is exported from your project during a search.
+          To fullfill the search request, Red-Light exports only the fields that were specified in the filters and requested output. Absolutely no other data is exported from your project during a search.
           <br /><br />
           After the search completes and the results are returned to the webpage, any reference to the PyCap project or the exported data is effectively lost. It is never written to disk or cached.
+          <br /><br />
         </dd>
         <dt>Does Red-Light store my API Key?</dt>
         <dd>
@@ -45,7 +46,7 @@
   <div class="span8">
     <h4>About</h4>
     <p>Red-Light was written to scratch an itch.</p>
-    <p>It is built upon <a href="http://project-redcap.org/">REDCap</a>, <a href="http://sburns.github.com/PyCap">PyCap</a>, <a href="http://pandas.pydata.org">Pandas</a>, <a href="http://flask.pocoo.org">Flask</a>, and <a href="http://twitter.github.com/bootstrap/index.html">Twitter Bootstrap</a>. You can vew the entire codebase for Red-Light at <a href="http://github.com/sburns/red-light">Github</a>.
+    <p>It is built upon <a href="http://project-redcap.org/">REDCap</a>, <a href="http://sburns.github.com/PyCap">PyCap</a>, <a href="http://pandas.pydata.org">Pandas</a>, <a href="http://flask.pocoo.org">Flask</a>, <a href="http://jquery.com">jQuery</a>, and <a href="http://twitter.github.com/bootstrap/index.html">Twitter Bootstrap</a>. You can vew the entire codebase for Red-Light at <a href="http://github.com/sburns/red-light">Github</a>.
     </p>
   </div>
   <div class="span1"></div>

@@ -7,18 +7,14 @@
     <form class="form">
         <input class="input-xxlarge" id="inputURL" placeholder="REDCap API URL" type="url"></input>
         <input class="input-xxlarge" id="inputAPI" placeholder="REDCAP API Key" type="text"></input>
+      <small class="" id="credentialCheck"></small>
     </form>
   </div>
   <div class="span3">
     <p>
       Enter the URL to your REDCap's API and your API Key. These can be obtained from your REDCap administrator.
     </p>
-<!--     <p>
-      <small>
-        See <a href="{{ url_for('about') }}">the about page </a>for what Red-Light does and doesn't do with your API key.
-      </small>
-    </p>
- -->  </div>
+  </div>
 </div>
 
 <div class="row">
@@ -26,7 +22,7 @@
   <div class="span7">
     <form class="form-inline" id="filterForm">
       <div id="filter1" class="clonedFilter" style="margin-bottom: 4px;">
-        <input class="field" data-provide="typeahead" type="text" placeholder="Column name" id="field1"></input>
+        <input class="field search" data-provide="typeahead" type="text" placeholder="Column name" id="field1"></input>
         <select class="span1 verb" id="select1">
           {% for v in verbs %}
           <option>{{ v }}</option>
@@ -55,7 +51,7 @@
   <div class="span7">
     <form class="form-inline" id="filterForm">
       <div id="outcol1" class="clonedOutputColumn" style="margin-bottom: 4px;">
-        <input class="outcol" data-provide="typeahead" type="text" placeholder="Output Key" id="col1"></input>
+        <input class="outcol search" data-provide="typeahead" type="text" placeholder="Output Field" id="col1"></input>
       </div>
     </form>
     <div class="btn-group">

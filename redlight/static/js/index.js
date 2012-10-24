@@ -1,4 +1,56 @@
 $(document).ready(function () {
+  var fields;
+
+  var clear_credentials = function() {
+    $(".typeahead").each(function() {
+      var ta = $(this).typeahead();
+      ta.data('typeahead').source = [];
+    });
+    $("small#credentialCheck").text("");
+  };
+
+  $('input#inputURL').focusin(function () {
+    clear_credentials();
+  });
+
+  $('input#inputAPI').focusin(function () {
+    clear_credentials();
+  });
+
+
+  function load_ta(elem) {
+    var ta = elem.typeahead();
+    elem.data('active', true);
+    ta.data('typeahead').source = [];
+    ta.data('typeahead').source = fields;
+    ta.data('typeahead').items = 12;
+    ta.data('typeahead').minLength = 0;
+    elem.data('active', false);
+    elem.trigger('keyup');
+  }
+
+  $("input.search").focus(function () {
+    load_ta($(this));
+  });
+
+
+  //Load up typeahead
+  $('input#inputAPI').focusout(function () {
+    $.getJSON($SCRIPT_ROOT + '/v1/columns.json',
+      $.param({
+        url: $("#inputURL").val(),
+        api: $("#inputAPI").val()
+      }, true),
+      function(d) {
+        if (d.err.length > 0) {
+          $("small#credentialCheck").removeClass("text-success").addClass("text-error").text("There was an error accessing your REDCap, try again with your credentials");
+          return;
+        } else {
+          $("small#credentialCheck").removeClass("text-error").addClass("text-success").text("REDCap access successful");
+          fields = d.columns;
+      }
+    });
+  });
 
   // Add filter
   $('a#addFilt').click(function () {
@@ -11,6 +63,7 @@ $(document).ready(function () {
     newFilter.children('input[id*="value"]').attr('id', 'value' + newNum);
     $('#filter' + num).after(newFilter);
     $('a#removeFilt').removeClass('disabled');
+    load_ta($("#field" + newNum));
   });
 
 
@@ -29,11 +82,12 @@ $(document).ready(function () {
   $('a#addOut').click(function () {
     var num = $('.clonedOutputColumn').length;
     var newNum = (num + 1);
-    var newFilter = $('#outcol' + num).clone().attr('id', 'outcol' + newNum);
+    var newOutput = $('#outcol' + num).clone().attr('id', 'outcol' + newNum);
     // Update each child
-    newFilter.children('input[id*="col"]').attr('id', 'col' + newNum);
-    $('#outcol' + num).after(newFilter);
+    newOutput.children('input[id*="col"]').attr('id', 'col' + newNum);
+    $('#outcol' + num).after(newOutput);
     $('a#removeOut').removeClass('disabled');
+    load_ta($("#col" + newNum));
   });
 
 
