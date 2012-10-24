@@ -34,9 +34,16 @@ class APITest(TestCase):
         json = response.json
         self.assertEqual(0, len(json['err']))
         self.assertTrue('columns' in json)
-        self.assertEqual(7, len(json['columns']))
+        self.assertEqual(6, len(json['columns']))
 
     def test_csv_output(self):
         "Ensure csv output"
         response = self.client.get(URLs['good_csv'])
-        self.assertIsInstance(response.data, basestring)
+        raw = response.data
+        self.assertIsInstance(raw, basestring)
+        splat = raw.splitlines()
+        len_header = len(splat[0].split(','))
+        # For each line, assert there are as many
+        # items within it as header columns
+        for l in splat[1:]:
+            self.assertEqual(len_header, len(l.split(',')))

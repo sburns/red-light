@@ -47,7 +47,7 @@ class BackendTest(TestCase):
 
     def test_get_columns(self):
         "Test grabbing columns from a REDCap"
-        correct_columns = ['study_id', 'first_name', 'last_name', 'dob', 'sex',
+        correct_columns = ['first_name', 'last_name', 'dob', 'sex',
             'test1_score', 'test2_score']
         comp_columns = backend.get_columns(RC_URL, RC_API)
         self.assertEqual(correct_columns, comp_columns)

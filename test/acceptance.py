@@ -9,7 +9,7 @@ __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 
 import sys
-from time import time
+from time import time, sleep
 from splinter import Browser
 
 RCURL, RCAPI = ('https://redcap.vanderbilt.edu/api/', 'AB5C15042ED4E15BB487C4E15A3AA928')
@@ -37,9 +37,16 @@ if __name__ == '__main__':
         inputURL.fill(RCURL)
         inputAPI.fill(RCAPI)
 
+        value1 = b.find_by_id('value1')[0]
+        value1.click()
+        # Remove focus from API, wait for get_columns
+        sleep(2)
+        credentialCheck = b.find_by_id('credentialCheck')[0]
+        assert "REDCap access successful" == credentialCheck.text
+        print "Column grabbing success"
+
         field1 = b.find_by_id('field1')[0]
         verb1 = b.find_by_id('select1')[0]
-        value1 = b.find_by_id('value1')[0]
 
         field1.fill('test1_score')
         verb1.type('>')
