@@ -52,8 +52,9 @@ def parse_arguments(req, req_filter=True):
 
 
 def get_columns(url, api):
+    "Return all fields but the primary"
     p = Project(url, api)
-    return p.field_names
+    return p.field_names[1:]
 
 
 class DB(object):
