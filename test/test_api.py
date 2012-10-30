@@ -9,6 +9,7 @@ __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 
 from . import TestCase, URLs, app
+import json
 
 
 class APITest(TestCase):
@@ -17,29 +18,31 @@ class APITest(TestCase):
         app.config["TESTING"] = True
         return app
 
+    def get_json(self, url, method, data):
+        return json.loads(self.client.post(url, data=data).data)
+
     def test_filter(self):
         "Ensure a simple API call works as expected"
-        response = self.client.get(URLs['good'])
+        json_resp = self.get_json(*URLs['good'])
         for req in ['header', 'err', 'result']:
-            self.assertIn(req, response.json)
-        self.assertEqual(len(response.json['result']), 22)
+            self.assertIn(req, json_resp)
+        self.assertEqual(len(json_resp['result']), 22)
         output_fields = ['first_name', 'last_name']
         for of in output_fields:
-            first_record = response.json['result'][0]
+            first_record = json_resp['result'][0]
             self.assertIn(of, first_record)
 
     def test_get_columns(self):
         "Test grabbing columns from the API"
-        response = self.client.get(URLs['get_columns'])
-        json = response.json
-        self.assertEqual(0, len(json['err']))
-        self.assertTrue('columns' in json)
-        self.assertEqual(6, len(json['columns']))
+        json_resp = self.get_json(*URLs['get_columns'])
+        self.assertEqual(0, len(json_resp['err']))
+        self.assertTrue('columns' in json_resp)
+        self.assertEqual(6, len(json_resp['columns']))
 
     def test_csv_output(self):
         "Ensure csv output"
-        response = self.client.get(URLs['good_csv'])
-        raw = response.data
+        url, _, data = URLs['good_csv']
+        raw = self.client.post(path=url, data=data).data
         self.assertIsInstance(raw, basestring)
         splat = raw.splitlines()
         len_header = len(splat[0].split(','))

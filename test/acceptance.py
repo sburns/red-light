@@ -8,9 +8,10 @@ Acceptance testing for Red-Light
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 
-import sys
 from time import time, sleep
 from splinter import Browser
+import requests
+from urlparse import urljoin
 
 RCURL, RCAPI = ('https://redcap.vanderbilt.edu/api/', 'AB5C15042ED4E15BB487C4E15A3AA928')
 
@@ -26,12 +27,35 @@ def parse_args():
         help="Url to test against [default: %s]" % def_url)
     return parser.parse_args()
 
-if __name__ == '__main__':
-    args = parse_args()
-    browser_driver = args.browser
-    testing_url = args.url
-    with Browser(browser_driver) as b:
-        b.visit(testing_url)
+
+def test_api(url):
+    print "Testing API..."
+    data = dict(url=RCURL, api=RCAPI, fields='test1_score', verbs='>',
+        values='50', outputs='first_name')
+
+    def response_from_post(url):
+        # use the same data
+        print "Posting to %s..." % url
+        return requests.post(url, data=data)
+
+    def test_endpoint(url, endpoint, required):
+        success = False
+        print "Testing %s..." % endpoint
+        json = response_from_post(urljoin(url, endpoint)).json
+        success = all(map(lambda x: x in json, required))
+        if success:
+            print "%s passed." % endpoint
+        return success
+
+    return all([test_endpoint(url, '/v1/columns.json', ['err', 'columns']),
+                test_endpoint(url, '/v1/filter.json', ['header', 'result', 'err'])])
+
+
+def test_ui(url, browser):
+    print "Testing UI..."
+    success = False
+    with Browser(browser) as b:
+        b.visit(url)
         inputURL = b.find_by_id('inputURL')[0]
         inputAPI = b.find_by_id('inputAPI')[0]
         inputURL.fill(RCURL)
@@ -62,14 +86,26 @@ if __name__ == '__main__':
         tend = time() + TO
         msg = b.find_by_id('resultText')[0]
 
-        success = False
         while 'Searching' in msg.text:
             if time() > tend:
                 print "Filtering failed"
-                ec = 1
                 break
         else:
             assert '28 records' in msg.text
             print "Filtering success"
-            ec = 0
-    sys.exit(ec)
+            success = True
+    return success
+
+if __name__ == '__main__':
+    args = parse_args()
+    url, browser = args.url, args.browser
+    if not test_ui(url, browser):
+        print "Failed UI test"
+    else:
+        print "Passed UI test"
+    print
+    print
+    if not test_api(url):
+        print "Failed API test"
+    else:
+        print "Passed API test"
