@@ -1,9 +1,10 @@
 language: python
 python:
   - "2.7"
+before_install:
+  - sudo apt-get install python-numpy
 install:
-  - apt-get install python-numpy
+  - ln -s /usr/lib/python2.7/dist-packages/numpy ~/virtualenv/python2.7/lib/python2.7/site-packages/
   - pip install requests==0.14.1
   - pip install -r requirements.txt --use-mirrors
-  - pip install -r dev-requirements.txt --use-mirrors
 script: nosetests -v
