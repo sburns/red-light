@@ -32,6 +32,13 @@ class APITest(TestCase):
             first_record = json_resp['result'][0]
             self.assertIn(of, first_record)
 
+    def test_no_filter(self):
+        "Ensure a filter call with no filter data still works"
+        json_resp = self.get_json(*URLs['no_filter'])
+        for req in ['header', 'err', 'result']:
+            self.assertIn(req, json_resp)
+        self.assertEqual(len(json_resp['result']), 50)
+
     def test_get_columns(self):
         "Test grabbing columns from the API"
         json_resp = self.get_json(*URLs['get_columns'])

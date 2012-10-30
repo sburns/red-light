@@ -30,7 +30,7 @@ DTYPE_COERCER = {dtype('float64'): float,
                  dtype('object'): str}
 
 
-def parse_form(form, require_filter=True):
+def parse_form(form, require_filter=False):
     api = form.get('api')
     url = form.get('url')
     fields = form.getlist('fields')
@@ -74,10 +74,11 @@ class DB(object):
         results = self.df.copy()
         # Build constraints and iteratively apply
         for key, verb, value in filters:
-            dtype = self.df[key].dtype
-            coerce_value = DTYPE_COERCER[dtype](value)
-            c = results[key].map(lambda x: VERBS[verb](x, coerce_value))
-            results = results[c]
+            if key and verb and value:
+                dtype = self.df[key].dtype
+                coerce_value = DTYPE_COERCER[dtype](value)
+                c = results[key].map(lambda x: VERBS[verb](x, coerce_value))
+                results = results[c]
         return results
 
     def make_outputs(self, keys, format='json'):
@@ -95,7 +96,11 @@ class DB(object):
                         # dtypes used in pandas aren't json-able, so coerce them to
                         # normal python types
                         coercer = DTYPE_COERCER[self.df[key].dtype]
-                        record_dict[key] = coercer(from_df[key][record])
+                        if pd.isnull(from_df[key][record]):
+                            val = ''
+                        else:
+                            val = coercer(from_df[key][record])
+                        record_dict[key] = val
                 all_results.append(record_dict)
         elif format == 'csv':
             result_buf = StringIO()

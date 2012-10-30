@@ -38,6 +38,8 @@ URLs = {
     'no_values':  ('/v1/filter.json', 'POST', {'api': 'AB5C15042ED4E15BB487C4E15A3AA928',
             'url': 'https://redcap.vanderbilt.edu/api/', 'fields': 'test1_score',
             'verbs': '<', 'outputs': ['first_name', 'last_name']}),
+    'no_filter':  ('/v1/filter.json', 'POST', {'api': 'AB5C15042ED4E15BB487C4E15A3AA928',
+            'url': 'https://redcap.vanderbilt.edu/api/'}),
     'get_columns':  ('/v1/columns.json', 'POST', {'api': 'AB5C15042ED4E15BB487C4E15A3AA928',
             'url': 'https://redcap.vanderbilt.edu/api/'})
 }
