@@ -36,11 +36,11 @@ $(document).ready(function () {
 
   //Load up typeahead
   $('input#inputAPI').focusout(function () {
-    $.getJSON($SCRIPT_ROOT + '/v1/columns.json',
-      $.param({
+    $.post($SCRIPT_ROOT + '/v1/columns.json',
+      {
         url: $("#inputURL").val(),
         api: $("#inputAPI").val()
-      }, true),
+      },
       function(d) {
         if (d.err.length > 0) {
           $("small#credentialCheck").removeClass("text-success").addClass("text-error").text("There was an error accessing your REDCap, try again with your credentials");
@@ -49,8 +49,9 @@ $(document).ready(function () {
           $("small#credentialCheck").removeClass("text-error").addClass("text-success").text("REDCap access successful");
           fields = d.columns;
       }
-    });
+    }, 'json');
   });
+
 
   // Add filter
   $('a#addFilt').click(function () {
@@ -125,7 +126,7 @@ $(document).ready(function () {
     $(".outcol").each(function (){
       outputs.push($(this).val());
     });
-    $.getJSON($SCRIPT_ROOT + '/v1/filter.json',
+    $.post($SCRIPT_ROOT + '/v1/filter.json',
     $.param({
       url: $("#inputURL").val(),
       api: $("#inputAPI").val(),
@@ -158,7 +159,7 @@ $(document).ready(function () {
         content += '</tbody></table>';
         $('div#results').append(content);
       }
-    });
+    }, 'json');
   });
 
 

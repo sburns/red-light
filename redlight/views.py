@@ -8,7 +8,7 @@ red-light view functions
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
 
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, make_response
 
 from . import __version__ as version
 from . import app
@@ -21,12 +21,12 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/v1/columns.<format>')
+@app.route('/v1/columns.<format>', methods=["POST"])
 def get_columns(format):
     err = ''
     columns = []
     try:
-        api, url, _ = backend.parse_arguments(request, req_filter=False)
+        api, url, _ = backend.parse_form(request.form, require_filter=False)
         columns = backend.get_columns(url, api)
     except Exception as e:
         err = "Error:%s" % str(e)
@@ -34,13 +34,13 @@ def get_columns(format):
         return jsonify(err=err, columns=columns)
 
 
-@app.route('/v1/filter.<format>')
+@app.route('/v1/filter.<format>', methods=["POST"])
 def search(format):
     err = ''
     try:
         try:
-            outputs = filter(None, request.args.getlist('outputs'))
-            api, url, filters = backend.parse_arguments(request)
+            outputs = filter(None, request.form.getlist('outputs'))
+            api, url, filters = backend.parse_form(request.form)
         except Exception as e:
             raise RedlightError("Error occured parsing arguments (%s)" % e)
         keys = [f[0] for f in filters]
@@ -71,7 +71,11 @@ def search(format):
     if format == 'json':
         return jsonify(result=results, header=header, err=err)
     else:
-        return err + results
+        resp = make_response(results + err)
+        resp.status_code = 200
+        if format == 'csv':  # add different mimetype handling here
+            resp.mimetype = 'test/csv'
+        return resp
 
 
 @app.route('/about')

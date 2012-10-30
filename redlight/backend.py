@@ -14,7 +14,6 @@ from StringIO import StringIO
 import pandas as pd
 from redcap import Project
 from numpy import dtype
-from flask import request
 
 from .err import RedlightError
 
@@ -31,13 +30,13 @@ DTYPE_COERCER = {dtype('float64'): float,
                  dtype('object'): str}
 
 
-def parse_arguments(req, req_filter=True):
-    api = request.args.get('api')
-    url = request.args.get('url')
-    fields = request.args.getlist('fields')
-    verbs = request.args.getlist('verbs')
-    values = request.args.getlist('values')
-    if req_filter:
+def parse_form(form, require_filter=True):
+    api = form.get('api')
+    url = form.get('url')
+    fields = form.getlist('fields')
+    verbs = form.getlist('verbs')
+    values = form.getlist('values')
+    if require_filter:
         required = zip(['api', 'url', 'fields', 'verbs', 'values'],
                      [api, url, fields, verbs, values])
     else:
