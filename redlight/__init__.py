@@ -7,7 +7,7 @@ Redlight, a web app for quick ad-hoc searches against redcap projects
 """
 __author__ = 'Scott Burns <scott.s.burns@vanderbilt.edu>'
 __copyright__ = 'Copyright 2012 Vanderbilt University. All Rights Reserved'
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 from flask import Flask
 
