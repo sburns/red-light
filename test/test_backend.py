@@ -39,17 +39,17 @@ class BackendTest(TestCase):
             for f in good_filters:
                 self.assertIn(f, filters)
 
-    def test_parse_form_missing_data(self):
-        "Test form parsing with missing data"
-        regex = 'The %s parameter is required'
-        zipped = zip(['no_url', 'no_api', 'no_fields', 'no_verbs', 'no_values'],
-            ['url', 'api', 'fields', 'verbs', 'values'])
-        for url_key, param in zipped:
-            form = ImmutableMultiDict(URLs[url_key][2])
-            # self.assertRaises(RedlightError, backend.parse_form, form)
-            backend.parse_form(form)
-            # with app.test_request_context(path=url, data=data, method=method):
-            #     self.assertRaises(RedlightError, backend.parse_form, request)
+    # def test_parse_form_missing_data(self):
+    #     "Test form parsing with missing data"
+    #     regex = 'The %s parameter is required'
+    #     zipped = zip(['no_url', 'no_api', 'no_fields', 'no_verbs', 'no_values'],
+    #         ['url', 'api', 'fields', 'verbs', 'values'])
+    #     for url_key, param in zipped:
+    #         form = ImmutableMultiDict(URLs[url_key][2])
+    #         self.assertRaises(RedlightError, backend.parse_form, form)
+    #         # backend.parse_form(form)
+    #         # with app.test_request_context(path=url, data=data, method=method):
+    #         #     self.assertRaises(RedlightError, backend.parse_form, request)
 
     def test_get_columns(self):
         "Test grabbing columns from a REDCap"
